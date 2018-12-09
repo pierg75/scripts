@@ -4,6 +4,7 @@
 from multiprocessing import Process
 import asyncore
 import socket
+import sys
 
 
 class SocketServer(asyncore.dispatcher):
@@ -73,8 +74,12 @@ if __name__ == "__main__":
     socketservers = []
     for port in ports:
         print("Starting thread on port: ", port)
-        server = SocketServer('localhost', port)
-        socketservers.append(Process(target=asyncore.loop))
+        try:
+            server = SocketServer('localhost', port)
+            socketservers.append(Process(target=asyncore.loop))
+        except socket.error as e:
+            print(e)
+            continue
 
     for sserver in socketservers:
         sserver.start()
