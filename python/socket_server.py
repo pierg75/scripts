@@ -30,7 +30,8 @@ class SocketServer(asyncore.dispatcher):
     def handle_accept(self):
         """Method to handle connections to the socket"""
         client = self.accept()
-        JobHandler(sock=client[0])
+        if client:
+            JobHandler(sock=client[0])
         return
 
     def handle_close(self):
