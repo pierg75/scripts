@@ -80,8 +80,8 @@ def handle_options():
                 where the server listen to')
     parser.add_argument('numports', type=int, help='number of ports \
                 to listen to')
-    parser.add_argument('--thread', '-t', help='Use threads')
-    parser.add_argument('--process', '-p', help='Use processes')
+    parser.add_argument('--thread', '-t', action='store_true', help='Use threads')
+    parser.add_argument('--process', '-p', action='store_true', help='Use processes')
     args = parser.parse_args()
     return args
 
