@@ -83,18 +83,22 @@ def handle_options():
     parser.add_argument('--thread', '-t', action='store_true', help='Use threads')
     parser.add_argument('--process', '-p', action='store_true', help='Use processes')
     args = parser.parse_args()
+    if args.thread and args.process:
+        print("Only one option between thread and process can be specified")
+        sys.exit(1)
     return args
 
 
 if __name__ == "__main__":
     args = handle_options()
     ports = range(args.startport, args.startport+args.numports)
+    start_server = Process if args.process else threading.Thread
     socketservers = []
     for port in ports:
         print("Starting thread on port: ", port)
         try:
             server = SocketServer('localhost', port)
-            socketservers.append(Process(target=asyncore.loop))
+            socketservers.append(start_server(target=asyncore.loop))
         except socket.error as e:
             print(e)
             continue
