@@ -2,9 +2,11 @@
 # I've done this with multiprocessing.Process but it could have been made 
 # with threading.Thread too
 from multiprocessing import Process
+import threading
 import asyncore
 import socket
 import sys
+import argparse 
 
 
 class SocketServer(asyncore.dispatcher):
@@ -70,8 +72,23 @@ class JobHandler(asyncore.dispatcher):
         self.close()
 
 
+def handle_options():
+    """Handle the command line options"""
+    parser = argparse.ArgumentParser(description='Starts a \
+                server listening on various ports')
+    parser.add_argument('startport', type=int, help='starting port \
+                where the server listen to')
+    parser.add_argument('numports', type=int, help='number of ports \
+                to listen to')
+    parser.add_argument('--thread', '-t', help='Use threads')
+    parser.add_argument('--process', '-p', help='Use processes')
+    args = parser.parse_args()
+    return args
+
+
 if __name__ == "__main__":
-    ports = range(65000, 65050)
+    args = handle_options()
+    ports = range(args.startport, args.startport+args.numports)
     socketservers = []
     for port in ports:
         print("Starting thread on port: ", port)
