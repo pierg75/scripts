@@ -95,7 +95,7 @@ if __name__ == "__main__":
     start_server = Process if args.process else threading.Thread
     socketservers = []
     for port in ports:
-        print("Starting thread on port: ", port)
+        print("Starting {0} on port: {1}".format("thread" if args.thread else "process", port))
         try:
             server = SocketServer('localhost', port)
             socketservers.append(start_server(target=asyncore.loop))
